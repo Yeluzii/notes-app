@@ -39,11 +39,7 @@ const EditNote = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const noteData = {
-        ...values,
-        userId: user.id,
-      };
-      await updateNote(noteId, noteData);
+      await updateNote(noteId, values);
       message.success('笔记更新成功');
       navigate('/notes');
     } catch (error) {

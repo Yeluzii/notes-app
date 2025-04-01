@@ -29,7 +29,10 @@ const CreateNote = () => {
     fetchCategories();
   }, []);
 
+  const [submitLoading, setSubmitLoading] = useState(false);
+
   const handleSubmit = async (values) => {
+    setSubmitLoading(true);
     try {
       const noteData = {
         ...values,
@@ -41,6 +44,8 @@ const CreateNote = () => {
     } catch (error) {
       console.error('Failed to create note:', error);
       message.error('创建笔记失败');
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -54,6 +59,7 @@ const CreateNote = () => {
           onSubmit={handleSubmit}
           submitButtonText="创建笔记"
           loading={loading}
+          submitLoading={submitLoading}
         />
       </div>
     </>

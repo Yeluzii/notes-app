@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { List, Card, Tag, Button, Modal, message } from 'antd';
+import { List, Card, Tag, Button, Modal, message, Spin } from 'antd';
 import { getNotes, deleteNote } from '@/api/noteApi';
 import { useStore } from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
@@ -16,13 +16,19 @@ const Notes = () => {
     if (!user) navigate('/login');
   }, [navigate]);
 
+  const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
   const fetchNotes = async () => {
+    setLoading(true);
     try {
       const fetchNotesData = await getNotes(user.id);
       setNotes(fetchNotesData.data);
     } catch (error) {
       console.error('Failed to fetch notes:', error);
       message.error('获取笔记失败');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,50 +45,51 @@ const Notes = () => {
           创建笔记
         </Button>
       </div>
-      <List
-        grid={{ gutter: 16, column: 4 }}
-        dataSource={notes}
-        className="p-4"
-        renderItem={(item) => (
-          <Card className="bg-blue-100 m-2" hoverable>
-            <Card.Meta
-              title={item.title}
-              description={item.content.substring(0, 100) + '...'}
-            />
-            <div className="my-4">
-              {item.tags.map((tag) => (
-                <Tag color="cyan" key={tag}>
-                  {tag}
-                </Tag>
-              ))}
-            </div>
-            <a href={`/notes/${item.id}`}>点击查看详情</a>
-            <Button
-              type="primary"
-              onClick={() => navigate(`/notes/edit/${item.id}`)}
-            >
-              编辑
-            </Button>
-            <Button
-              type="primary"
-              onClick={(e) => {
-                setModalVisible(true);
-                setSelectedNoteId(item.id);
-              }}
-            >
-              删除
-            </Button>
-          </Card>
-        )}
-      />
+      <Spin spinning={loading}>
+        <List
+          grid={{ gutter: 16, column: 4 }}
+          dataSource={notes}
+          className="p-4"
+          renderItem={(item) => (
+            <Card className="bg-blue-100 m-2" hoverable>
+              <Card.Meta
+                title={item.title}
+                description={
+                  (item.content ? item.content.substring(0, 100) : '暂无内容') +
+                  '...'
+                }
+              />
+              <div className="my-4">
+                {item.tags &&
+                  item.tags.map((tag) => (
+                    <Tag color="cyan" key={tag}>
+                      {tag}
+                    </Tag>
+                  ))}
+              </div>
+              <a href={`/notes/${item.id}`}>点击查看详情</a>
+              <Button
+                type="primary"
+                onClick={() => navigate(`/notes/edit/${item.id}`)}
+              >
+                编辑
+              </Button>
+              <Button
+                type="primary"
+                onClick={(e) => {
+                  setModalVisible(true);
+                  setSelectedNoteId(item.id);
+                }}
+              >
+                删除
+              </Button>
+            </Card>
+          )}
+        />
+      </Spin>
       <Modal
-        title="确认删除"
-        open={modalVisible}
-        onCancel={() => {
-          setModalVisible(false);
-          setSelectedNoteId(null);
-        }}
         onOk={async () => {
+          setDeleteLoading(true);
           try {
             await deleteNote(selectedNoteId);
             message.success('笔记删除成功');
@@ -93,8 +100,10 @@ const Notes = () => {
           } finally {
             setModalVisible(false);
             setSelectedNoteId(null);
+            setDeleteLoading(false);
           }
         }}
+        confirmLoading={deleteLoading}
       >
         <p>确定要删除这条笔记吗？此操作不可恢复。</p>
       </Modal>
