@@ -10,6 +10,7 @@ const Notes = lazy(() => import('../pages/Notes'));
 const Note = lazy(() => import('../pages/Note'));
 const CreateNote = lazy(() => import('../pages/CreateNote'));
 const EditNote = lazy(() => import('../pages/EditNote'));
+const TrashPage = lazy(() => import('../pages/TrashPage'));
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route path="/notes/:id" element={<Note />} />
         <Route path="/create-note" element={<CreateNote />} />
         <Route path="/notes/edit/:noteId" element={<EditNote />} />
+        <Route path="/notes/trash" element={<TrashPage />} />
       </Routes>
     </Suspense>
   );

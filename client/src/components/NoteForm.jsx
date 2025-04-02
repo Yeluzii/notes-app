@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Form, Input, Button, Tag, Select } from 'antd';
 import Cherry from 'cherry-markdown';
 import 'cherry-markdown/dist/cherry-markdown.css';
 
 const NoteForm = ({
+  type,
   initialValues,
   categories,
   onSubmit,
@@ -16,8 +17,8 @@ const NoteForm = ({
   const editorRef = useRef(null);
   const cherryRef = useRef(null);
 
-  // 如果有初始值，设置表单的初始值和标签
-  React.useEffect(() => {
+  // 如果有初始值，设置表单的初始值
+  useEffect(() => {
     if (!cherryRef.current) {
       cherryRef.current = new Cherry({
         id: 'cherry-markdown',
@@ -73,6 +74,7 @@ const NoteForm = ({
       ...values,
       content,
       tags,
+      type,
     };
     await onSubmit(noteData);
   };

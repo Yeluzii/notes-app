@@ -34,7 +34,7 @@ const CategoryNotes = () => {
   return (
     <>
       <Navbar />
-      <h1>分类笔记列表</h1>
+      <h1 className="m-6">分类笔记列表</h1>
       <List
         grid={{ gutter: 16, column: 4 }}
         dataSource={notes}

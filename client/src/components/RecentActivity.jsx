@@ -1,5 +1,10 @@
 import { Timeline, Card, Typography } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  HistoryOutlined,
+} from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { getNotes } from '@/api/noteApi';
 
@@ -38,7 +43,7 @@ const RecentActivity = ({ userId }) => {
   const getIcon = (type) => {
     switch (type) {
       case 'create':
-        return <PlusOutlined className="text-green-500" />;
+        return <PlusOutlined className="bg-#ffc text-green-500" />;
       case 'update':
         return <EditOutlined className="text-blue-500" />;
       case 'delete':
@@ -50,13 +55,18 @@ const RecentActivity = ({ userId }) => {
 
   return (
     <Card
-      title="最近笔记活动"
-      className="mt-4 shadow-sm hover:shadow-md transition-shadow duration-300"
+      title={
+        <>
+          <HistoryOutlined style={{ marginRight: 8 }} />
+          最近的笔记活动
+        </>
+      }
+      className="bg-#cdc mt-4 shadow-sm hover:shadow-md transition-shadow duration-300"
       style={{ maxHeight: '500px', overflowY: 'auto' }}
     >
       {activities.length > 0 ? (
         <Timeline
-          className="px-2"
+          className="px-2 "
           items={activities.map((activity) => ({
             dot: getIcon(activity.type),
             children: (

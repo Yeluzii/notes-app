@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { List, Card, Tag, Button, Modal, message, Spin } from 'antd';
-import { getNotes, deleteNote } from '@/api/noteApi';
+import { getNotes, trashNote } from '@/api/noteApi';
 import { useStore } from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -55,26 +55,31 @@ const Notes = () => {
               <Card.Meta
                 title={item.title}
                 description={
-                  (item.content ? item.content.substring(0, 100) : '暂无内容') +
+                  (item.content ? item.content.substring(0, 30) : '暂无内容') +
                   '...'
                 }
               />
               <div className="my-4">
-                {item.tags &&
+                {item.tags && item.tags.length > 0 ? (
                   item.tags.map((tag) => (
                     <Tag color="cyan" key={tag}>
                       {tag}
                     </Tag>
-                  ))}
+                  ))
+                ) : (
+                  <Tag color="cyan">暂无标签</Tag>
+                )}
               </div>
               <a href={`/notes/${item.id}`}>点击查看详情</a>
               <Button
+                className="ml-2"
                 type="primary"
                 onClick={() => navigate(`/notes/edit/${item.id}`)}
               >
                 编辑
               </Button>
               <Button
+                className="ml-2"
                 type="primary"
                 onClick={(e) => {
                   setModalVisible(true);
@@ -88,10 +93,11 @@ const Notes = () => {
         />
       </Spin>
       <Modal
+        open={modalVisible}
         onOk={async () => {
           setDeleteLoading(true);
           try {
-            await deleteNote(selectedNoteId);
+            await trashNote(selectedNoteId);
             message.success('笔记删除成功');
             fetchNotes();
           } catch (error) {
@@ -103,9 +109,10 @@ const Notes = () => {
             setDeleteLoading(false);
           }
         }}
+        onCancel={() => setModalVisible(false)}
         confirmLoading={deleteLoading}
       >
-        <p>确定要删除这条笔记吗？此操作不可恢复。</p>
+        <p>确定要删除这条笔记吗？后续您可在回收站中恢复。</p>
       </Modal>
     </>
   );

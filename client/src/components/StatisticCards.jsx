@@ -30,7 +30,7 @@ const StatisticCards = ({ userId }) => {
   return (
     <Row gutter={16}>
       <Col span={12}>
-        <Card className="hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-#ffc hover:shadow-lg transition-shadow duration-300">
           <Statistic
             title="笔记总数"
             value={notesCount}
@@ -41,7 +41,7 @@ const StatisticCards = ({ userId }) => {
         </Card>
       </Col>
       <Col span={12}>
-        <Card className="hover:shadow-lg transition-shadow duration-300">
+        <Card className="bg-#ecf hover:shadow-lg transition-shadow duration-300">
           <Statistic
             title="分类总数"
             value={categoriesCount}

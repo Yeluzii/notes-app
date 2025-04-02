@@ -55,6 +55,7 @@ const CreateNote = () => {
       <div className="p-4">
         <h1>创建笔记</h1>
         <NoteForm
+          initialValues={{}}
           categories={categories}
           onSubmit={handleSubmit}
           submitButtonText="创建笔记"

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout, Menu, Typography, Avatar, Space, Button, Modal } from 'antd';
 import { useStore } from '@/store/userStore';
+import { DeleteFilled } from '@ant-design/icons';
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -82,7 +83,11 @@ const Navbar = () => {
         <Space>
           {user ? (
             <>
-              <Space align="center">
+              <Button
+                icon={<DeleteFilled style={{ fontSize: '24px' }} />}
+                onClick={() => navigate(`/notes/trash`)}
+              />
+              <Space size={'large'}>
                 <Avatar src={user.avatar_url}></Avatar>
                 <Text style={{ color: 'white' }}>{user.username}</Text>
               </Space>

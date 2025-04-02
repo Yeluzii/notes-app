@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <Layout className="h-screen">
       <Navbar />
-      <Content className="p-6">
+      <Content className="p-6 bg-#dff">
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           {user ? (
             <>

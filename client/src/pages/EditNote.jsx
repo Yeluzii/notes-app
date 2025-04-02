@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { message } from 'antd';
 import { updateNote, getNote } from '@/api/noteApi';
 import { getCategories } from '@/api/categoryApi';
-import { useStore } from '@/store/userStore';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import NoteForm from '@/components/NoteForm';
@@ -10,7 +9,6 @@ import NoteForm from '@/components/NoteForm';
 const EditNote = () => {
   const navigate = useNavigate();
   const { noteId } = useParams();
-  const { user } = useStore();
   const [loading, setLoading] = useState(true);
   const [noteData, setNoteData] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -54,6 +52,7 @@ const EditNote = () => {
       <div className="p-4">
         <h1>编辑笔记</h1>
         <NoteForm
+          type="update"
           initialValues={noteData}
           categories={categories}
           onSubmit={handleSubmit}
